@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <main class="main-content">
+    <section class="manga-section">
+      <h2 class="section-title">Update Komik Terbaru</h2>
+
+      <% if (mangaList && mangaList.length > 0) { %>
+        <div class="manga-grid">
+          <% mangaList.forEach(manga => { %>
+            <%- include('partials/mangaCard', { manga }) %>
+          <% }) %>
+        </div>
+
+        <%- include('partials/pagination', { pagination, queryString: '' }) %>
+      <% } else { %>
+        <p class="empty-state">Belum ada manga. Admin, silakan tambahkan manga melalui dashboard.</p>
+      <% } %>
+    </section>
+  </main>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/mobileNavbar.js"></script>
+  <script src="/js/mobileSearch.js"></script>
+</body>
+</html>

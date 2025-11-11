@@ -1,0 +1,42 @@
+<nav class="navbar" id="navbar">
+  <div class="navbar-container">
+    <div class="navbar-left">
+      <a href="/" class="navbar-logo">Manga Reader</a>
+    </div>
+    <div class="navbar-right">
+      <!-- Search form (desktop) -->
+      <form action="/search" method="GET" class="search-form desktop-only">
+        <input type="text" name="q" placeholder="Search manga..." value="<%= typeof query !== 'undefined' ? query : '' %>" required>
+        <button type="submit">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </button>
+      </form>
+
+      <!-- Mobile icons -->
+      <button class="icon-btn mobile-only" id="mobileSearchBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </button>
+      <button class="icon-btn mobile-only" id="sidebarToggle">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile search box (hidden by default) -->
+  <div class="mobile-search-box" id="mobileSearchBox">
+    <input type="text" id="mobileSearchInput" placeholder="Search manga...">
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<%- include('sidebar') %>

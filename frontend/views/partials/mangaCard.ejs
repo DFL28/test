@@ -1,0 +1,18 @@
+<a href="/manga/<%= manga.slug %>" class="manga-card">
+  <div class="manga-cover">
+    <img src="<%= manga.cover_path %>" alt="<%= manga.title %>" loading="lazy">
+    <% if (manga.is_color) { %>
+      <span class="badge badge-color">COLOR</span>
+    <% } %>
+  </div>
+  <div class="manga-info">
+    <h3 class="manga-title"><%= manga.title %></h3>
+    <div class="manga-meta">
+      <span class="chapter"><%= manga.latestChapter || 'N/A' %></span>
+      <span class="time"><%= manga.updatedAgo || '' %></span>
+    </div>
+    <div class="rating">
+      <span class="stars">★★★★★</span>
+    </div>
+  </div>
+</a>

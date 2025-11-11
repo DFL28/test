@@ -1,0 +1,14 @@
+node_modules/
+backend/db/*.db
+backend/db/*.db-shm
+backend/db/*.db-wal
+data/covers/*
+data/manga/*
+data/users/*
+!data/covers/.gitkeep
+!data/manga/.gitkeep
+!data/users/.gitkeep
+*.log
+npm-debug.log*
+.env
+.DS_Store

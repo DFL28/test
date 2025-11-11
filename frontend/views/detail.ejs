@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <main class="main-content">
+    <div class="detail-container">
+      <div class="detail-header">
+        <img src="<%= manga.cover_path %>" alt="<%= manga.title %>" class="detail-cover">
+        <div class="detail-info">
+          <h1><%= manga.title %></h1>
+          <div class="info-items">
+            <div class="info-item"><strong>Status:</strong> <%= manga.status || 'Unknown' %></div>
+            <div class="info-item"><strong>Type:</strong> <%= manga.content_type || 'Manga' %></div>
+            <% if (manga.genres_text) { %>
+              <div class="info-item"><strong>Genres:</strong> <%= manga.genres_text %></div>
+            <% } %>
+          </div>
+          <div class="description">
+            <h3>Sinopsis</h3>
+            <p><%= manga.description || 'Tidak ada deskripsi.' %></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapters-section">
+        <h2>Daftar Chapter</h2>
+        <% if (chapters && chapters.length > 0) { %>
+          <div class="chapters-list">
+            <% chapters.forEach(chapter => { %>
+              <a href="/manga/<%= manga.slug %>/chapter/<%= chapter.chapter_number %>" class="chapter-item">
+                <span>Chapter <%= chapter.chapter_number %></span>
+                <% if (chapter.title) { %>
+                  <span class="chapter-title"><%= chapter.title %></span>
+                <% } %>
+              </a>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p>Belum ada chapter tersedia.</p>
+        <% } %>
+      </div>
+
+      <div class="comments-section" id="comments">
+        <h2><%= commentCount %> Komentar</h2>
+
+        <% if (currentUser) { %>
+          <form action="/manga/<%= manga.slug %>/comments" method="POST" class="comment-form">
+            <textarea name="content" placeholder="Tulis komentar di sini..." required minlength="1"></textarea>
+            <button type="submit" class="btn-primary">Kirim</button>
+          </form>
+        <% } else { %>
+          <div class="login-prompt">
+            <p>Silakan <a href="/login">masuk</a> untuk berkomentar.</p>
+          </div>
+        <% } %>
+
+        <div class="comments-list">
+          <% comments.forEach(comment => { %>
+            <div class="comment">
+              <div class="comment-header">
+                <img src="<%= comment.avatar_path || '/img/default-avatar.png' %>" alt="Avatar" class="comment-avatar">
+                <div>
+                  <strong><%= comment.username %></strong>
+                  <span class="comment-time"><%= comment.timeAgo %></span>
+                </div>
+              </div>
+              <div class="comment-body">
+                <%= comment.content %>
+              </div>
+              <div class="comment-actions">
+                <% if (currentUser) { %>
+                  <button class="reply-btn" data-comment-id="<%= comment.id %>">Reply</button>
+                <% } %>
+                <% if (currentUser && currentUser.is_admin) { %>
+                  <button class="delete-btn" data-comment-id="<%= comment.id %>">Hapus</button>
+                <% } %>
+              </div>
+
+              <% if (comment.replies && comment.replies.length > 0) { %>
+                <div class="replies">
+                  <% comment.replies.forEach(reply => { %>
+                    <div class="comment reply">
+                      <div class="comment-header">
+                        <img src="<%= reply.avatar_path || '/img/default-avatar.png' %>" alt="Avatar" class="comment-avatar">
+                        <div>
+                          <strong><%= reply.username %></strong>
+                          <span class="comment-time"><%= reply.timeAgo %></span>
+                        </div>
+                      </div>
+                      <div class="comment-body">
+                        <%= reply.content %>
+                      </div>
+                      <% if (currentUser && currentUser.is_admin) { %>
+                        <div class="comment-actions">
+                          <button class="delete-btn" data-comment-id="<%= reply.id %>">Hapus</button>
+                        </div>
+                      <% } %>
+                    </div>
+                  <% }) %>
+                </div>
+              <% } %>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/mobileNavbar.js"></script>
+  <script src="/js/mobileSearch.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <main class="main-content auth-page">
+    <div class="auth-container">
+      <h2>Lupa Password</h2>
+
+      <% if (error) { %>
+        <div class="error-message"><%= error %></div>
+      <% } %>
+
+      <% if (success) { %>
+        <div class="success-message"><%= success %></div>
+      <% } else { %>
+        <p>Masukkan email Anda untuk menerima link reset password.</p>
+
+        <form action="/forgot" method="POST" class="auth-form">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" required>
+          </div>
+          <button type="submit" class="btn-primary">Kirim Link Reset</button>
+        </form>
+      <% } %>
+
+      <div class="auth-links">
+        <a href="/login">Kembali ke Login</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/mobileNavbar.js"></script>
+</body>
+</html>

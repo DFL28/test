@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <main class="main-content">
+    <div class="admin-dashboard">
+      <h1>Admin Dashboard</h1>
+
+      <div class="admin-stats">
+        <div class="stat-card">
+          <h3>Total Manga</h3>
+          <p class="stat-number"><%= mangaCount %></p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Komentar</h3>
+          <p class="stat-number"><%= commentCount %></p>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <h2>Tambah Manga Baru</h2>
+        <form id="addMangaForm" class="admin-form">
+          <div class="form-group">
+            <label>URL Manga (komikindo/maid/komiku)</label>
+            <input type="url" name="url" id="mangaUrl" required placeholder="https://komikindo.ch/manga/...">
+          </div>
+          <button type="submit" class="btn-primary">Tambah Manga</button>
+        </form>
+        <div id="addMangaResult"></div>
+      </div>
+
+      <div class="admin-section">
+        <h2>Komentar Terbaru</h2>
+        <div class="comments-list">
+          <% recentComments.forEach(comment => { %>
+            <div class="admin-comment">
+              <div class="comment-meta">
+                <strong><%= comment.username %></strong> on
+                <a href="/manga/<%= comment.manga_slug || '#' %>"><%= comment.manga_title %></a>
+              </div>
+              <div class="comment-text"><%= comment.content %></div>
+              <div class="comment-actions">
+                <button class="btn-danger" onclick="deleteComment(<%= comment.id %>)">Hapus</button>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/mobileNavbar.js"></script>
+  <script>
+    document.getElementById('addMangaForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const url = document.getElementById('mangaUrl').value;
+      const resultDiv = document.getElementById('addMangaResult');
+
+      resultDiv.innerHTML = '<p class="loading">Menambahkan manga...</p>';
+
+      try {
+        const response = await fetch('/admin/manga/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          resultDiv.innerHTML = '<p class="success">Manga berhasil ditambahkan!</p>';
+          document.getElementById('mangaUrl').value = '';
+        } else {
+          resultDiv.innerHTML = '<p class="error">' + (data.error || 'Gagal menambahkan manga') + '</p>';
+        }
+      } catch (error) {
+        resultDiv.innerHTML = '<p class="error">Error: ' + error.message + '</p>';
+      }
+    });
+
+    async function deleteComment(commentId) {
+      if (!confirm('Hapus komentar ini?')) return;
+
+      try {
+        const response = await fetch('/comments/' + commentId + '/delete', {
+          method: 'POST'
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          alert('Komentar berhasil dihapus');
+          location.reload();
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    }
+  </script>
+</body>
+</html>

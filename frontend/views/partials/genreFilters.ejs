@@ -1,0 +1,66 @@
+<div class="genre-filters">
+  <form method="GET" action="/genre" id="genreFilterForm">
+    <!-- Row 1 -->
+    <div class="filter-row">
+      <div class="filter-item">
+        <label>Genre:</label>
+        <select name="genre" onchange="this.form.submit()">
+          <option value="all" <%= filters.genre === 'all' ? 'selected' : '' %>>All</option>
+          <% allGenres.forEach(genre => { %>
+            <option value="<%= genre %>" <%= filters.genre === genre ? 'selected' : '' %>><%= genre %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label>Status:</label>
+        <select name="status" onchange="this.form.submit()">
+          <option value="all" <%= filters.status === 'all' ? 'selected' : '' %>>All</option>
+          <option value="ongoing" <%= filters.status === 'ongoing' ? 'selected' : '' %>>Ongoing</option>
+          <option value="completed" <%= filters.status === 'completed' ? 'selected' : '' %>>Completed</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="filter-row">
+      <div class="filter-item">
+        <label>Content Type:</label>
+        <select name="content_type" onchange="this.form.submit()">
+          <option value="all" <%= filters.contentType === 'all' ? 'selected' : '' %>>All</option>
+          <option value="manga" <%= filters.contentType === 'manga' ? 'selected' : '' %>>Manga</option>
+          <option value="manhwa" <%= filters.contentType === 'manhwa' ? 'selected' : '' %>>Manhwa</option>
+          <option value="manhua" <%= filters.contentType === 'manhua' ? 'selected' : '' %>>Manhua</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label>Type:</label>
+        <select name="type" onchange="this.form.submit()">
+          <option value="all" <%= filters.type === 'all' ? 'selected' : '' %>>All</option>
+          <option value="webtoon" <%= filters.type === 'webtoon' ? 'selected' : '' %>>Webtoon</option>
+          <option value="oneshot" <%= filters.type === 'oneshot' ? 'selected' : '' %>>One-shot</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="filter-row">
+      <div class="filter-item">
+        <label>Order:</label>
+        <select name="order" onchange="this.form.submit()">
+          <option value="default" <%= filters.order === 'default' ? 'selected' : '' %>>Default</option>
+          <option value="latest" <%= filters.order === 'latest' ? 'selected' : '' %>>Latest Update</option>
+          <option value="popular" <%= filters.order === 'popular' ? 'selected' : '' %>>Most Popular</option>
+          <option value="title" <%= filters.order === 'title' ? 'selected' : '' %>>Title A-Z</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label>Color:</label>
+        <select name="color" onchange="this.form.submit()">
+          <option value="all" <%= filters.color === 'all' ? 'selected' : '' %>>All</option>
+          <option value="color" <%= filters.color === 'color' ? 'selected' : '' %>>Color</option>
+          <option value="bw" <%= filters.color === 'bw' ? 'selected' : '' %>>Black & White</option>
+        </select>
+      </div>
+    </div>
+  </form>
+</div>

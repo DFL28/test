@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body class="reader-body">
+  <%- include('partials/navbar') %>
+
+  <main class="reader-main">
+    <div class="reader-header">
+      <h2><%= manga.title %> - Chapter <%= chapter.chapter_number %></h2>
+    </div>
+
+    <div class="reader-nav">
+      <% if (prevChapter) { %>
+        <a href="/manga/<%= manga.slug %>/chapter/<%= prevChapter.chapter_number %>" class="nav-btn">&lt; Prev</a>
+      <% } else { %>
+        <button class="nav-btn" disabled>&lt; Prev</button>
+      <% } %>
+
+      <div class="chapter-selector">
+        <button id="chapterListBtn" class="nav-btn">Daftar Chapter</button>
+        <div id="chapterDropdown" class="chapter-dropdown" style="display: none;">
+          <% allChapters.forEach(ch => { %>
+            <a href="/manga/<%= manga.slug %>/chapter/<%= ch.chapter_number %>"
+               class="chapter-option <%= ch.chapter_number === chapter.chapter_number ? 'active' : '' %>">
+              Chapter <%= ch.chapter_number %>
+            </a>
+          <% }) %>
+        </div>
+      </div>
+
+      <% if (nextChapter) { %>
+        <a href="/manga/<%= manga.slug %>/chapter/<%= nextChapter.chapter_number %>" class="nav-btn">Next &gt;</a>
+      <% } else { %>
+        <button class="nav-btn" disabled>Next &gt;</button>
+      <% } %>
+    </div>
+
+    <div class="reader-images" id="readerImages">
+      <% if (pages && pages.length > 0) { %>
+        <% pages.forEach(page => { %>
+          <img src="<%= page.image_path %>" alt="Page <%= page.page_number %>" class="reader-page" loading="lazy">
+        <% }) %>
+      <% } else { %>
+        <p class="loading-state">Memuat gambar...</p>
+      <% } %>
+    </div>
+
+    <!-- Zoom controls (desktop only) -->
+    <div class="zoom-controls desktop-only">
+      <button id="zoomOut" class="zoom-btn">-</button>
+      <button id="zoomIn" class="zoom-btn">+</button>
+    </div>
+  </main>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/mobileNavbar.js"></script>
+  <script src="/js/reader.js"></script>
+  <script src="/js/zoom.js"></script>
+
+  <% if (nextChapter) { %>
+  <script>
+    // Auto next chapter on mobile
+    if (window.innerWidth <= 768) {
+      window.addEventListener('scroll', function() {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+          window.location.href = '/manga/<%= manga.slug %>/chapter/<%= nextChapter.chapter_number %>';
+        }
+      });
+    }
+  </script>
+  <% } %>
+</body>
+</html>

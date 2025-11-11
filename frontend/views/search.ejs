@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <main class="main-content">
+    <section class="manga-section">
+      <h2 class="section-title">
+        <% if (query) { %>
+          Hasil Pencarian: "<%= query %>"
+        <% } else { %>
+          Search
+        <% } %>
+      </h2>
+
+      <% if (mangaList && mangaList.length > 0) { %>
+        <div class="manga-grid">
+          <% mangaList.forEach(manga => { %>
+            <%- include('partials/mangaCard', { manga }) %>
+          <% }) %>
+        </div>
+
+        <%- include('partials/pagination', { pagination, queryString: 'q=' + encodeURIComponent(query) }) %>
+      <% } else if (query) { %>
+        <p class="empty-state">Tidak ada hasil untuk "<%= query %>"</p>
+      <% } else { %>
+        <p class="empty-state">Masukkan kata kunci pencarian</p>
+      <% } %>
+    </section>
+  </main>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/mobileNavbar.js"></script>
+  <script src="/js/mobileSearch.js"></script>
+</body>
+</html>

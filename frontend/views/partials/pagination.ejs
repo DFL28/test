@@ -1,0 +1,25 @@
+<% if (pagination && pagination.totalPages > 1) { %>
+<div class="pagination">
+  <% if (pagination.hasPrev) { %>
+    <a href="?page=<%= pagination.prevPage %><%= typeof queryString !== 'undefined' && queryString ? '&' + queryString : '' %>" class="page-btn">
+      &lt;
+    </a>
+  <% } %>
+
+  <% pagination.pages.forEach(page => { %>
+    <% if (page === pagination.currentPage) { %>
+      <span class="page-btn active"><%= page %></span>
+    <% } else { %>
+      <a href="?page=<%= page %><%= typeof queryString !== 'undefined' && queryString ? '&' + queryString : '' %>" class="page-btn">
+        <%= page %>
+      </a>
+    <% } %>
+  <% }) %>
+
+  <% if (pagination.hasNext) { %>
+    <a href="?page=<%= pagination.nextPage %><%= typeof queryString !== 'undefined' && queryString ? '&' + queryString : '' %>" class="page-btn">
+      &gt;
+    </a>
+  <% } %>
+</div>
+<% } %>
