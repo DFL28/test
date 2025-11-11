@@ -62,7 +62,7 @@
           <% comments.forEach(comment => { %>
             <div class="comment">
               <div class="comment-header">
-                <img src="<%= comment.avatar_path || '/img/default-avatar.png' %>" alt="Avatar" class="comment-avatar">
+                <img src="<%= comment.avatar_path || '/img/default-avatar.svg' %>" alt="Avatar" class="comment-avatar">
                 <div>
                   <strong><%= comment.username %></strong>
                   <span class="comment-time"><%= comment.timeAgo %></span>
@@ -85,7 +85,7 @@
                   <% comment.replies.forEach(reply => { %>
                     <div class="comment reply">
                       <div class="comment-header">
-                        <img src="<%= reply.avatar_path || '/img/default-avatar.png' %>" alt="Avatar" class="comment-avatar">
+                        <img src="<%= reply.avatar_path || '/img/default-avatar.svg' %>" alt="Avatar" class="comment-avatar">
                         <div>
                           <strong><%= reply.username %></strong>
                           <span class="comment-time"><%= reply.timeAgo %></span>

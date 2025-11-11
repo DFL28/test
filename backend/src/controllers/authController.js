@@ -13,7 +13,7 @@ const authController = {
     if (req.user) {
       return res.redirect('/');
     }
-    res.render('auth/signup', { error: null });
+    res.render('auth/signup', { title: 'Signup', error: null });
   },
 
   /**
@@ -25,24 +25,24 @@ const authController = {
 
       // Validasi input
       if (!username || !email || !password || !confirm) {
-        return res.render('auth/signup', { error: 'Semua field harus diisi' });
+        return res.render('auth/signup', { title: 'Signup', error: 'Semua field harus diisi' });
       }
 
       if (password.length < 8) {
-        return res.render('auth/signup', { error: 'Password minimal 8 karakter' });
+        return res.render('auth/signup', { title: 'Signup', error: 'Password minimal 8 karakter' });
       }
 
       if (password !== confirm) {
-        return res.render('auth/signup', { error: 'Password dan konfirmasi tidak cocok' });
+        return res.render('auth/signup', { title: 'Signup', error: 'Password dan konfirmasi tidak cocok' });
       }
 
       // Cek username dan email sudah ada atau belum
       if (userModel.usernameExists(username)) {
-        return res.render('auth/signup', { error: 'Username sudah digunakan' });
+        return res.render('auth/signup', { title: 'Signup', error: 'Username sudah digunakan' });
       }
 
       if (userModel.emailExists(email)) {
-        return res.render('auth/signup', { error: 'Email sudah terdaftar' });
+        return res.render('auth/signup', { title: 'Signup', error: 'Email sudah terdaftar' });
       }
 
       // Hash password
@@ -66,7 +66,7 @@ const authController = {
       res.redirect('/');
     } catch (error) {
       console.error('Error in signup:', error);
-      res.render('auth/signup', { error: 'Terjadi kesalahan. Silakan coba lagi.' });
+      res.render('auth/signup', { title: 'Signup', error: 'Terjadi kesalahan. Silakan coba lagi.' });
     }
   },
 
@@ -77,7 +77,7 @@ const authController = {
     if (req.user) {
       return res.redirect('/');
     }
-    res.render('auth/login', { error: null });
+    res.render('auth/login', { title: 'Login', error: null });
   },
 
   /**
@@ -88,21 +88,21 @@ const authController = {
       const { identifier, password } = req.body;
 
       if (!identifier || !password) {
-        return res.render('auth/login', { error: 'Email/username dan password harus diisi' });
+        return res.render('auth/login', { title: 'Login', error: 'Email/username dan password harus diisi' });
       }
 
       // Cari user berdasarkan email atau username
       const user = userModel.findByEmailOrUsername(identifier);
 
       if (!user) {
-        return res.render('auth/login', { error: 'Email/username atau password salah' });
+        return res.render('auth/login', { title: 'Login', error: 'Email/username atau password salah' });
       }
 
       // Verify password
       const isValid = await bcrypt.compare(password, user.password_hash);
 
       if (!isValid) {
-        return res.render('auth/login', { error: 'Email/username atau password salah' });
+        return res.render('auth/login', { title: 'Login', error: 'Email/username atau password salah' });
       }
 
       // Buat session baru
@@ -120,7 +120,7 @@ const authController = {
       res.redirect('/');
     } catch (error) {
       console.error('Error in login:', error);
-      res.render('auth/login', { error: 'Terjadi kesalahan. Silakan coba lagi.' });
+      res.render('auth/login', { title: 'Login', error: 'Terjadi kesalahan. Silakan coba lagi.' });
     }
   },
 
@@ -142,7 +142,7 @@ const authController = {
    * GET /forgot - Tampilkan form forgot password
    */
   showForgot(req, res) {
-    res.render('auth/forgot', { error: null, success: null });
+    res.render('auth/forgot', { title: 'Forgot Password', error: null, success: null });
   },
 
   /**
@@ -153,10 +153,7 @@ const authController = {
       const { email } = req.body;
 
       if (!email) {
-        return res.render('auth/forgot', {
-          error: 'Email harus diisi',
-          success: null
-        });
+        return res.render('auth/forgot', { title: 'Forgot Password', error: 'Email harus diisi', success: null });
       }
 
       const user = userModel.findByEmail(email);
@@ -177,16 +174,10 @@ const authController = {
         console.log(`Reset link: http://localhost:${config.PORT}/reset/${token}`);
       }
 
-      res.render('auth/forgot', {
-        error: null,
-        success: successMessage
-      });
+      res.render('auth/forgot', { title: 'Forgot Password', error: null, success: successMessage });
     } catch (error) {
       console.error('Error in forgotPassword:', error);
-      res.render('auth/forgot', {
-        error: 'Terjadi kesalahan. Silakan coba lagi.',
-        success: null
-      });
+      res.render('auth/forgot', { title: 'Forgot Password', error: 'Terjadi kesalahan. Silakan coba lagi.', success: null });
     }
   },
 
@@ -198,14 +189,13 @@ const authController = {
 
     // Validasi token
     if (!resetTokenModel.isValid(token)) {
-      return res.render('auth/reset', {
-        token: null,
+      return res.render('auth/reset', { title: 'Reset Password', token: null,
         error: 'Token tidak valid atau sudah expired',
         success: null
       });
     }
 
-    res.render('auth/reset', { token, error: null, success: null });
+    res.render('auth/reset', { title: 'Reset Password', token, error: null, success: null });
   },
 
   /**
@@ -219,8 +209,7 @@ const authController = {
       // Validasi token
       const resetToken = resetTokenModel.findByToken(token);
       if (!resetToken || !resetTokenModel.isValid(token)) {
-        return res.render('auth/reset', {
-          token: null,
+        return res.render('auth/reset', { title: 'Reset Password', token: null,
           error: 'Token tidak valid atau sudah expired',
           success: null
         });
@@ -228,24 +217,21 @@ const authController = {
 
       // Validasi password
       if (!password || !confirm) {
-        return res.render('auth/reset', {
-          token,
+        return res.render('auth/reset', { title: 'Reset Password', token,
           error: 'Semua field harus diisi',
           success: null
         });
       }
 
       if (password.length < 8) {
-        return res.render('auth/reset', {
-          token,
+        return res.render('auth/reset', { title: 'Reset Password', token,
           error: 'Password minimal 8 karakter',
           success: null
         });
       }
 
       if (password !== confirm) {
-        return res.render('auth/reset', {
-          token,
+        return res.render('auth/reset', { title: 'Reset Password', token,
           error: 'Password dan konfirmasi tidak cocok',
           success: null
         });
@@ -263,15 +249,13 @@ const authController = {
       // Force logout semua device
       sessionModel.deleteAllUserSessions(resetToken.user_id);
 
-      res.render('auth/reset', {
-        token: null,
+      res.render('auth/reset', { title: 'Reset Password', token: null,
         error: null,
         success: 'Password berhasil direset. Silakan login dengan password baru.'
       });
     } catch (error) {
       console.error('Error in resetPassword:', error);
-      res.render('auth/reset', {
-        token: req.params.token,
+      res.render('auth/reset', { title: 'Reset Password', token: req.params.token,
         error: 'Terjadi kesalahan. Silakan coba lagi.',
         success: null
       });
